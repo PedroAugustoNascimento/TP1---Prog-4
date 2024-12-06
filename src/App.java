@@ -1,73 +1,62 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class App {
+
+public class Main {
     public static void main(String[] args) throws Exception {
-        String path = "C:\\Users\\pakkz\\OneDrive\\Desktop\\TP1 - Prog 4\\TP1\\arquivos\\teste.txt";
-        leitor(path);
+        Scanner sc = new Scanner(System.in);
+
+        int num = quantidadeCasos(sc);
+        List<Integer> ordendos = retornarEordenar(num, sc);
+        print(ordendos);
+        sc.close();
     }
 
-    public static void leitor(String caminho){
-        try{
-            FileReader arquivo = new FileReader(caminho);
-            BufferedReader leitura = new BufferedReader(arquivo);
-
-            //lendo a primeira linha e verificando a quantidade de casos
-            String line = leitura.readLine();
-
-                int qtdCase = Integer.parseInt(line.trim());
-
-                for (int n =0; n<qtdCase; n++){
-                    if(n>0){
-                        System.out.println('\n');
-                    }
-                    //pega a segunda linha e separa as chaves e a quantidade de números
-                    String [] linha = leitura.readLine().trim().split(" ");
-                    int chaves = Integer.parseInt(linha[0]);
-                    int numeros = Integer.parseInt(linha[1]);
-
-                    //calculando enderecos
-                    String [] enderecos = leitura.readLine().trim().split(" ");
-                    int valores[] = new int[numeros];
-                    for (int i =0; i<numeros; i++){
-                        valores[i] = calculaEnderecos(Integer.parseInt(enderecos[i]),chaves);
-                    }
-
-                    //criando uma array vazia com a quantidade de endereco
-                    List<String> array = new ArrayList<>();
-                    for (int i=0; i<chaves; i++){
-                        array.add(i + " ->");
-                    }
-
-                    //verificando os valores dos enderecos e se a chave está no array
-                    for (int i=0; i<array.size();i++){
-                        for (String num : array){
-                            if (array.contains(Integer.toString(valores[i]))){
-                                array.set(num, " -> "+ enderecos[i]);
-                            }
-                        }
-                    }
-                   
-                    //printando resultado
-                    for(String num: array){
-                        System.out.println(num);
-                    }
-                    
-
-
-                }
-        }  catch (IOException e) {
-            System.err.printf("Arquivo não encontrado: %s.\n",
-                      e.getMessage());
-       }
+    //verificando a quantidade de casos teste
+    public static int quantidadeCasos(Scanner sc) {
+        int qtdCase = sc.nextInt();
+        return qtdCase;
     }
 
-    public static int calculaEnderecos(int numero, int endereco){
-        int dispersao = numero % endereco;
-        return dispersao;
+    //função para retornar e ordenar os arrayslist de pares e impares
+    public static List<Integer> retornarEordenar(int qtdCase, Scanner sc) {
+        List<Integer> pares = new ArrayList<>();
+        List<Integer> impares = new ArrayList<>();
+        List<Integer> ordenados = new ArrayList<>();
+
+        //metodos para separar em pares e impares
+        for (int i = 0; i < qtdCase; i++) {
+            int numero = sc.nextInt();
+            if (numero % 2 == 0) {
+                pares.add(numero);
+            } else {
+                impares.add(numero);
+            }
+        }
+
+        //forma de ordenar em forma crescente
+        Collections.sort(pares);
+
+        //forma de ordenar em forma decrescente
+        Collections.sort(impares, Collections.reverseOrder());
+
+        //adicionando os pares ordenados
+        for (int num: pares){
+            ordenados.add(num);
+        }
+        //adicionado os impares ordenados
+        for (int num: impares){
+            ordenados.add(num);
+        }
+        return ordenados;
+    }
+    //printando os resultados
+    public static void print(List<Integer> ordenados){ 
+        for (int num : ordenados) {
+            System.out.println(num);
+        }
     }
 
 }
